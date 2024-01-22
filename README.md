@@ -91,14 +91,14 @@ In this project, the goal was to strengthen the network security of the simulate
 This project successfully leveraged Suricata, OPNsense, and Wazuh to create a robust network security infrastructure. The combination of custom rules for threat detection and active response mechanisms for immediate mitigation ensures a proactive and efficient defense against various cyber threats. Continuous monitoring, periodic rule adjustments, and user education will contribute to the project's long-term success in maintaining a secure network environment.
 
 ## References: 
-Online tutorials, ChatGPT and official documentation of tools used. 
+Online tutorials, ChatGPT, and official documentation of tools used. 
 
 ## Screenshots:
-
-  ![screenshot](setnetwork.png)
-  
-  ![screenshot](wazuh.png)
-  
-   ![screenshot](alerts.png)
-   
-   ![screenshot](alerts2.png)
+Example Log of Suricata Custom Rules during testing
+  ![screenshot](alerts2.png)
+Log of Brute Force Attack  
+  ![screenshot](bruteforce.png)
+Example Log of Login Failures during testing
+   ![screenshot](loginfail.png)
+Log of Login Failures and Active Response  
+   ![screenshot](loginfailresponse.png)
