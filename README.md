@@ -1,20 +1,65 @@
 # Project Portfolio: Enhancing Network Security with Suricata, OPNsense, and Wazuh
 
 ## Project Overview
-In this project, the goal was to strengthen the network security of my simulated enterprise in my homelab by implementing a comprehensive solution involving Suricata for custom rule creation in OPNsense and integrating Wazuh for advanced threat detection and active response.
+In this project, the goal was to strengthen the network security of the simulated enterprise in my homelab by implementing a comprehensive solution involving Suricata for custom rule creation in OPNsense and integrating Wazuh for advanced threat detection and active response.
 
 ### 1. Suricata Custom Rules in OPNsense
 - **Objective:** Strengthen network visibility and threat detection by customizing Suricata rules on the OPNsense firewall.
+- **Background:** Even with Nmap scans I wasn't always able to detect every interaction on the internal network. I wanted everything to be logged even if it was to be a nuisance alarm I could later adjust.
 - **Implementation:**
   - Configured Suricata, an open-source intrusion detection and prevention system, on the OPNsense firewall.
   - Developed and deployed custom rules in Suricata to generate alerts for every interaction with IP addresses within the network.
+  - EXAMPLE: *each tested and confirmed with a simple Nmap scan*
+    - ALERT - FIREWALL TOUCHED	
+	- ALERT - WINDOWS MACHINE TOUCHED	
+	- ALERT - LINUX SERVER TOUCHED	
+	- ALERT - UBUNTU SERVER TOUCHED
 
-### 2. Wazuh Active Response for Brute Force Protection
+## 2. Wazuh Active Response for Brute Force Protection and Credential Access
+
 - **Objective:** Enhance security measures by implementing active response mechanisms using Wazuh.
+- **Background:** I set up an SSH connection between the Windows machine and the Ubuntu server, logging various interactions. Multiple failed login attempts, even as root, were only being logged without a response. Additionally, Wazuh logged several brute force attack attempts from outside the network onto the OPNsense firewall. Active response to these threats was deemed necessary.
 - **Implementation:**
   - Integrated Wazuh, an open-source security information and event management (SIEM) tool, into the network infrastructure.
   - Utilized custom active responses in Wazuh to implement dynamic firewall blocking in response to brute force attacks.
   - Configured Wazuh to initiate firewall blocks for IP addresses involved in multiple failed login attempts within a specified time frame.
+  
+  **EXAMPLE:**
+  
+  ```xml
+  <!-- Firewall Block brute force attempt rule - 87702-->
+  <active-response>
+    <command>firewall-drop</command>
+    <location>local</location>
+    <rules_id>87702</rules_id>
+    <timeout>no</timeout>
+  </active-response>
+  
+  <!-- Firewall Block incorrect login for 180s - rule 5503-->
+  <active-response>
+    <command>firewall-drop</command>
+    <location>local</location>
+    <rules_id>5503</rules_id>
+    <timeout>180</timeout>
+  </active-response>
+  
+  <!-- 3 Incorrect Logins within 60 min - Repeat Offenses: rule 5503 -->
+  <active-response>
+    <command>firewall-drop</command>
+    <location>local</location>
+    <rules_id>5503</rules_id>
+    <timeout>no</timeout>
+    <repeated_offenders>
+      <minutes>60</minutes>
+      <threshold>3</threshold>
+    </repeated_offenders>
+  </active-response>
+
+- **With this configuration:**
+   - When a brute force attack is detected the response is set to firewall-drop.
+   - When a user enters an incorrect password their IP address will be blocked from the system for 180s. 
+   - When a user enters an incorrect password 3 times within a 60-minute period, their IP address will be blocked from the system permanently.
+
 
 ### 3. Key Achievements and Outcomes
 - **Improved Threat Detection:**
