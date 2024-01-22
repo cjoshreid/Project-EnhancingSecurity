@@ -1,4 +1,4 @@
-# Project Portfolio: Enhancing Network Security with Suricata, OPNsense, and Wazuh
+# Portfolio Project: Enhancing Network Security with Suricata, OPNsense, and Wazuh
 
 ## Project Overview
 In this project, the goal was to strengthen the network security of the simulated enterprise in my homelab by implementing a comprehensive solution involving Suricata for custom rule creation in OPNsense and integrating Wazuh for advanced threat detection and active response.
